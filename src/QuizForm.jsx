@@ -128,7 +128,7 @@ const QuizForm = () => {
             <div>
               {values.questions.length > 0 &&
                 values.questions.map((question, index) => (
-                  <div className="row" key={index}>
+                  <div className="row questionGroup" key={index}>
                     <div className="col">
                       <label htmlFor={`questions.${index}.header`}>Pytanie</label>
                       <Field
@@ -161,14 +161,14 @@ const QuizForm = () => {
                         className="secondary"
                         onClick={() => remove(index)}
                       >
-                        X
+                        Usuń pytanie
                       </button>
                     </div>
                   </div>
                 ))}
               <button
                 type="button"
-                className="secondary"
+                className="secondary dynamic"
                 onClick={() => push({ header: '', teaser: '' })}
               >
               Dodaj pytanie
