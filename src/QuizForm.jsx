@@ -110,19 +110,19 @@ const QuizForm = () => {
         
         <Form>
           <MyTextInput
-            label="title"
+            label="Tytuł"
             name="title"
             type="text"
             placeholder=""
           />
           <MyTextInput
-            label="teaser"
+            label="Teaser"
             name="teaser"
             type="text"
             placeholder=""
           />
 
-       
+        <h3>Pytania</h3>
         <FieldArray name="questions">
           {({ insert, remove, push }) => (
             <div>
@@ -130,7 +130,7 @@ const QuizForm = () => {
                 values.questions.map((question, index) => (
                   <div className="row" key={index}>
                     <div className="col">
-                      <label htmlFor={`questions.${index}.header`}>Header</label>
+                      <label htmlFor={`questions.${index}.header`}>Pytanie</label>
                       <Field
                         name={`questions.${index}.header`}
                         placeholder=""
@@ -143,7 +143,7 @@ const QuizForm = () => {
                       />
                     </div>
                     <div className="col">
-                      <label htmlFor={`questions.${index}.teaser`}>Teaser</label>
+                      <label htmlFor={`questions.${index}.teaser`}>Dodatkowe informacje pytania</label>
                       <Field
                         name={`questions.${index}.teaser`}
                         placeholder=""
