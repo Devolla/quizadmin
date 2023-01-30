@@ -1,10 +1,12 @@
+
 import './App.css';
+import QuizForm from './QuizForm';
 
 function App() {
   return (
-    <div className="App">
-     
-    </div>
+    <>
+      <QuizForm/>
+    </>
   );
 }
 
