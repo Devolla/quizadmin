@@ -74,6 +74,34 @@ const StyledLabel = styled.label`
 //   );
 // };
 
+
+
+const Answers = ({ question, name }) => (
+  <FieldArray
+    name={name}
+    render={arrayHelpers => (
+      <div style={{ marginTop: "8px", backgroundColor: "rgba(0,0,0,0" }}>
+        {question.answers.length > 0 &&
+          question.answers.map((answer, index) => (
+            <div key={index}>
+              <Field name={`${name}.${index}`} />
+              <button
+                type="button"
+                onClick={() => arrayHelpers.remove(index)}
+              >
+                Usuń odpowiedź
+              </button>
+            </div>
+          ))}
+      
+          <button type="button" onClick={() => arrayHelpers.push("")}>
+            Dodaj odpowiedź
+          </button>
+      </div>
+    )}
+  />
+);
+
 // And now we can use these
 const QuizForm = () => {
   return (
@@ -86,7 +114,8 @@ const QuizForm = () => {
           questions: [
             {
               header: '',
-              teaser: ''
+              teaser: '',
+              answers: []
             },
           ],
         }}
@@ -116,12 +145,17 @@ const QuizForm = () => {
             type="text"
             placeholder=""
           />
-          <MyTextInput
+          {/* <MyTextInput
             label="Teaser"
             name="teaser"
             type="text"
             placeholder=""
-          />
+          /> */}
+          <label htmlFor="teaser">Opis</label>
+          <Field 
+          as="textarea" 
+          label="Teaser"
+          name="teaser" placeholder='' />
 
         <h3>Pytania</h3>
         <FieldArray name="questions">
@@ -156,13 +190,18 @@ const QuizForm = () => {
                         className="field-error"
                       />
                     </div>
+                    <Answers
+                      question={question}
+                      name={`questions.${index}.answers`}
+                    />
+
                     <div className="col">
                       <button
                         type="button"
                         className="secondary"
                         onClick={() => remove(index)}
                       >
-                        Usuń pytanie
+                        Usuń pytanie i odpowiedzi
                       </button>
                     </div>
                   </div>
@@ -170,17 +209,17 @@ const QuizForm = () => {
               <button
                 type="button"
                 className="secondary dynamic"
-                onClick={() => push({ header: '', teaser: '' })}
+                onClick={() => push({ 
+                  header: '', 
+                  teaser: '',
+                  answers: [] 
+                })}
               >
               Dodaj pytanie
               </button>
             </div>
           )}
         </FieldArray>
-
-
-
-
           <button type="submit">Submit</button>
         </Form>
           )}
