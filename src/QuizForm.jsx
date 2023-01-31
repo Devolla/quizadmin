@@ -84,17 +84,18 @@ const Answers = ({ question, name }) => (
         {question.answers.length > 0 &&
           question.answers.map((answer, index) => (
             <div key={index}>
-              <Field name={`${name}.${index}`} />
+              <Field name={`${name}.${index}`} type="text" />
               <button
                 type="button"
                 onClick={() => arrayHelpers.remove(index)}
+                style={{ marginTop: "8px"}}
               >
                 Usuń odpowiedź
               </button>
             </div>
           ))}
       
-          <button type="button" onClick={() => arrayHelpers.push("")}>
+          <button type="button" onClick={() => arrayHelpers.push("")} style={{ marginTop: "8px"}}>
             Dodaj odpowiedź
           </button>
       </div>
@@ -190,6 +191,9 @@ const QuizForm = () => {
                         className="field-error"
                       />
                     </div>
+
+
+                    <h4>Odpowiedzi</h4>
                     <Answers
                       question={question}
                       name={`questions.${index}.answers`}
