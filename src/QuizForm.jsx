@@ -21,20 +21,20 @@ const MyTextInput = ({ label, ...props }) => {
   );
 };
 
-const MyCheckbox = ({ children, ...props }) => {
-  const [field, meta] = useField({ ...props, type: "checkbox" });
-  return (
-    <>
-      <label className="checkbox">
-        <input {...field} {...props} type="checkbox" />
-        {children}
-      </label>
-      {meta.touched && meta.error ? (
-        <div className="error">{meta.error}</div>
-      ) : null}
-    </>
-  );
-};
+// const MyCheckbox = ({ children, ...props }) => {
+//   const [field, meta] = useField({ ...props, type: "checkbox" });
+//   return (
+//     <>
+//       <label className="checkbox">
+//         <input {...field} {...props} type="checkbox" />
+//         {children}
+//       </label>
+//       {meta.touched && meta.error ? (
+//         <div className="error">{meta.error}</div>
+//       ) : null}
+//     </>
+//   );
+// };
 
 // Styled components ....
 const StyledSelect = styled.select`
@@ -59,20 +59,20 @@ const StyledLabel = styled.label`
   margin-top: 1rem;
 `;
 
-const MySelect = ({ label, ...props }) => {
-  // useField() returns [formik.getFieldProps(), formik.getFieldMeta()]
+// useField() returns [formik.getFieldProps(), formik.getFieldMeta()]
   // which we can spread on <input> and alse replace ErrorMessage entirely.
-  const [field, meta] = useField(props);
-  return (
-    <>
-      <StyledLabel htmlFor={props.id || props.name}>{label}</StyledLabel>
-      <StyledSelect {...field} {...props} />
-      {meta.touched && meta.error ? (
-        <StyledErrorMessage>{meta.error}</StyledErrorMessage>
-      ) : null}
-    </>
-  );
-};
+// const MySelect = ({ label, ...props }) => {
+//   const [field, meta] = useField(props);
+//   return (
+//     <>
+//       <StyledLabel htmlFor={props.id || props.name}>{label}</StyledLabel>
+//       <StyledSelect {...field} {...props} />
+//       {meta.touched && meta.error ? (
+//         <StyledErrorMessage>{meta.error}</StyledErrorMessage>
+//       ) : null}
+//     </>
+//   );
+// };
 
 // And now we can use these
 const QuizForm = () => {
@@ -104,6 +104,7 @@ const QuizForm = () => {
         // }}
         onSubmit={values => {
           alert(JSON.stringify(values, null, 2));
+          console.log(values, 'values')
         }}
       >
           {({ values }) => (
