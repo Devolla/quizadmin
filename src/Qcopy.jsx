@@ -15,7 +15,7 @@ const MyTextInput = ({ label, ...props }) => {
       <label htmlFor={props.id || props.name}>{label}</label>
       <input className="text-input" {...field} {...props} />
       {/* {console.log(field)} */}
-      {/* {console.log(meta)} */}
+      {console.log(meta)}
       {meta.touched && meta.error ? (
         <div className="error">{meta.error}</div>
       ) : null}
@@ -85,35 +85,19 @@ const Answers = ({ question, name }) => (
       <div style={{ marginTop: "8px", backgroundColor: "rgba(0,0,0,0" }}>
         {question.answers.length > 0 &&
           question.answers.map((answer, index) => (
-            <div className="row answerGroup" key={index}>
-             
-              <div className="col">
-                <label htmlFor={`${name}.${index}.header`}>Odpowiedź</label>
-                <Field name={`${name}.${index}.header`} type="text" placeholder="" />
-              </div>
-              <div className="col">
-                <label htmlFor={`${name}.${index}.teaser`}>Dodatkowe informacje odpowiedzi</label>
-                <Field name={`${name}.${index}.teaser`} type="text" placeholder="" />
-              </div>
-              
+            <div key={index}>
+              <Field name={`${name}.${index}`} type="text" />
               <button
                 type="button"
                 onClick={() => arrayHelpers.remove(index)}
                 style={{ marginTop: "8px"}}
               >
-                Usuń grupę informacji dotyczących odpowiedzi
+                Usuń odpowiedź
               </button>
             </div>
           ))}
       
-          <button 
-          type="button" 
-          class="secondary"
-          onClick={() => arrayHelpers.push({ 
-            header: '', 
-            teaser: ''
-          })}
-          style={{ marginTop: "8px"}}>
+          <button type="button" onClick={() => arrayHelpers.push("")} style={{ marginTop: "8px"}}>
             Dodaj odpowiedź
           </button>
       </div>
@@ -164,7 +148,12 @@ const QuizForm = () => {
             type="text"
             placeholder=""
           />
-    
+          {/* <MyTextInput
+            label="Teaser"
+            name="teaser"
+            type="text"
+            placeholder=""
+          /> */}
           <label htmlFor="teaser">Opis</label>
           <Field 
           as="textarea" 
@@ -215,7 +204,7 @@ const QuizForm = () => {
                     <div className="col">
                       <button
                         type="button"
-                        className="deleteQuestionGroup"
+                        className="secondary"
                         onClick={() => remove(index)}
                       >
                         Usuń pytanie i odpowiedzi
@@ -229,10 +218,7 @@ const QuizForm = () => {
                 onClick={() => push({ 
                   header: '', 
                   teaser: '',
-                  answers: [{
-                    header: '', 
-                    teaser: ''
-                  }] 
+                  answers: [] 
                 })}
               >
               Dodaj pytanie

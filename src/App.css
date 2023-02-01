@@ -621,6 +621,7 @@ button[type="reset"] {
   border: 2px solid var(--gray-300);
   color: var(--gray-900);
   margin: 20px 0;
+  font-size: 14px;
 }
 
 button.secondary:hover,
@@ -652,7 +653,7 @@ button[type="submit"] {
 
 
 .questionGroup {
-  border: 1px solid lightblue;
+  border: 1px solid #199ABD;
   border-radius: 10px;
   padding: 10px;
   margin: 10px 0;
@@ -672,4 +673,26 @@ form {
   max-width: 600px;
   text-align: left;
   margin: 0 auto;
+}
+
+.answerGroup {
+  border: 1px solid lightblue;
+  border-radius: 10px;
+  padding: 10px;
+  margin: 10px 0;
+}
+
+.answerGroup button {
+  background-color: lightblue;
+  color: #232323;
+  border: none;
+  font-size: 13px;
+}
+
+/* .secondary.dynamic {
+
+} */
+
+.deleteQuestionGroup {
+  font-size: 15px
 }
