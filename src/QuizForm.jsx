@@ -95,6 +95,10 @@ const Answers = ({ question, name }) => (
                 <label htmlFor={`${name}.${index}.teaser`}>Dodatkowe informacje odpowiedzi</label>
                 <Field name={`${name}.${index}.teaser`} type="text" placeholder="" />
               </div>
+              <div className="col">
+                <label htmlFor={`${name}.${index}.scale`}>Punkty za odpowiedź</label>
+                <Field name={`${name}.${index}.scale`} type="number" min="0" max="100" />
+              </div>
               
               <button
                 type="button"
@@ -108,10 +112,11 @@ const Answers = ({ question, name }) => (
       
           <button 
           type="button" 
-          class="secondary"
+          className="secondary"
           onClick={() => arrayHelpers.push({ 
             header: '', 
-            teaser: ''
+            teaser: '',
+            scale: 0
           })}
           style={{ marginTop: "8px"}}>
             Dodaj odpowiedź
@@ -134,7 +139,11 @@ const QuizForm = () => {
             {
               header: '',
               teaser: '',
-              answers: []
+              answers: [{
+                header: '', 
+                teaser: '',
+                scale: 0
+              }]
             },
           ],
         }}
@@ -231,7 +240,8 @@ const QuizForm = () => {
                   teaser: '',
                   answers: [{
                     header: '', 
-                    teaser: ''
+                    teaser: '',
+                    scale: 0
                   }] 
                 })}
               >
