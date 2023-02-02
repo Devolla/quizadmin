@@ -90,6 +90,7 @@ const QuizForm = () => {
             {
               header: '',
               teaser: '',
+              file: null,
               answers: [{
                 header: '', 
                 teaser: '',
@@ -174,6 +175,16 @@ const QuizForm = () => {
                       />
                     </div>
 
+                    <div className="form-group">
+                      <label htmlFor="file">Zdjęcie</label>
+                      <input id="file" name="file" type="file" onChange={(event) => {
+                        setFieldValue("file", event.currentTarget.files[0]);
+                        setTimeout(previewFile, 1000)
+                      }} className="form-control" />
+                      { values.file !== null && <img src="" height="200" alt=""/>}
+                    </div>
+
+
 
                     <h4>Odpowiedzi</h4>
                     <Answers
@@ -198,6 +209,7 @@ const QuizForm = () => {
                 onClick={() => push({ 
                   header: '', 
                   teaser: '',
+                  file: null,
                   answers: [{
                     header: '', 
                     teaser: '',
