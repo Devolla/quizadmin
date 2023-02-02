@@ -1,82 +1,20 @@
-import React, { useEffect } from "react";
-import ReactDOM from "react-dom";
-import { Formik, Form, Field, ErrorMessage, useField, useFormikContext, FieldArray } from "formik";
+import React from "react";
+import { Formik, Form, Field, ErrorMessage, useField, FieldArray } from "formik";
 import * as Yup from "yup";
-import styled from "@emotion/styled";
 import "./App.css";
-// import "./styles-custom.css";
 
 const MyTextInput = ({ label, ...props }) => {
-  // useField() returns [formik.getFieldProps(), formik.getFieldMeta()]
-  // which we can spread on <input> and alse replace ErrorMessage entirely.
   const [field, meta] = useField(props);
   return (
     <>
       <label htmlFor={props.id || props.name}>{label}</label>
       <input className="text-input" {...field} {...props} />
-      {/* {console.log(field)} */}
-      {/* {console.log(meta)} */}
       {meta.touched && meta.error ? (
         <div className="error">{meta.error}</div>
       ) : null}
     </>
   );
 };
-
-// const MyCheckbox = ({ children, ...props }) => {
-//   const [field, meta] = useField({ ...props, type: "checkbox" });
-//   return (
-//     <>
-//       <label className="checkbox">
-//         <input {...field} {...props} type="checkbox" />
-//         {children}
-//       </label>
-//       {meta.touched && meta.error ? (
-//         <div className="error">{meta.error}</div>
-//       ) : null}
-//     </>
-//   );
-// };
-
-// Styled components ....
-const StyledSelect = styled.select`
-  color: var(--blue);
-`;
-
-const StyledErrorMessage = styled.div`
-  font-size: 12px;
-  color: var(--red-600);
-  width: 400px;
-  margin-top: 0.25rem;
-  &:before {
-    content: "❌ ";
-    font-size: 10px;
-  }
-  @media (prefers-color-scheme: dark) {
-    color: var(--red-300);
-  }
-`;
-
-const StyledLabel = styled.label`
-  margin-top: 1rem;
-`;
-
-// useField() returns [formik.getFieldProps(), formik.getFieldMeta()]
-  // which we can spread on <input> and alse replace ErrorMessage entirely.
-// const MySelect = ({ label, ...props }) => {
-//   const [field, meta] = useField(props);
-//   return (
-//     <>
-//       <StyledLabel htmlFor={props.id || props.name}>{label}</StyledLabel>
-//       <StyledSelect {...field} {...props} />
-//       {meta.touched && meta.error ? (
-//         <StyledErrorMessage>{meta.error}</StyledErrorMessage>
-//       ) : null}
-//     </>
-//   );
-// };
-
-
 
 const Answers = ({ question, name }) => (
   <FieldArray
@@ -126,7 +64,19 @@ const Answers = ({ question, name }) => (
   />
 );
 
-// And now we can use these
+function previewFile() {
+  const preview = document.querySelector('img');
+  const file = document.querySelector('input[type=file]').files[0];
+  const reader = new FileReader();
+  reader.addEventListener("load", () => {
+    preview.src = reader.result;
+  }, false);
+
+  if (file) {
+    reader.readAsDataURL(file);
+  }
+}
+
 const QuizForm = () => {
   return (
     <>
@@ -135,6 +85,7 @@ const QuizForm = () => {
         initialValues={{
           title: "",
           teaser: "",
+          file: null,
           questions: [
             {
               header: '',
@@ -164,7 +115,7 @@ const QuizForm = () => {
           console.log(values, 'values')
         }}
       >
-          {({ values }) => (
+          {({ values, setFieldValue }) => (
         
         <Form>
           <MyTextInput
@@ -179,6 +130,15 @@ const QuizForm = () => {
           as="textarea" 
           label="Teaser"
           name="teaser" placeholder='' />
+
+          <div className="form-group">
+            <label htmlFor="file">Zdjęcie</label>
+            <input id="file" name="file" type="file" onChange={(event) => {
+              setFieldValue("file", event.currentTarget.files[0]);
+              setTimeout(previewFile, 1000)
+            }} className="form-control" />
+         { values.file !== null && <img src="" height="200" alt=""/>}
+          </div>
 
         <h3>Pytania</h3>
         <FieldArray name="questions">

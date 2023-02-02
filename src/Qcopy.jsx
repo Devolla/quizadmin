@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import ReactDOM from "react-dom";
 import { Formik, Form, Field, ErrorMessage, useField, useFormikContext, FieldArray } from "formik";
 import * as Yup from "yup";
@@ -15,7 +15,7 @@ const MyTextInput = ({ label, ...props }) => {
       <label htmlFor={props.id || props.name}>{label}</label>
       <input className="text-input" {...field} {...props} />
       {/* {console.log(field)} */}
-      {console.log(meta)}
+      {/* {console.log(meta)} */}
       {meta.touched && meta.error ? (
         <div className="error">{meta.error}</div>
       ) : null}
@@ -76,6 +76,42 @@ const StyledLabel = styled.label`
 //   );
 // };
 
+// const Thumb = ({file}) => {
+//   const [thumb, setThumb] = useState(undefined);
+//   const filec = file;
+  
+//   useEffect(() => {
+//     console.log(file, 'file')
+  
+//     let reader = new FileReader();
+//     reader.onloadend = () => {
+//       setThumb({thumb: reader.result });
+//     };
+//     reader.readAsDataURL(filec);
+//     console.log(thumb, 'thumb')
+//   }, [])
+
+//     return (<img src={thumb.data}
+//     alt={file.name}
+//     className="img-thumbnail mt-2"
+//     height={200}
+//     width={200} />);
+// } 
+  // componentWillReceiveProps(nextProps) {
+  //   console.log(nextProps)
+  //   if (!nextProps.file) { return; }
+
+  //   this.setState({ loading: true }, () => {
+  //     let reader = new FileReader();
+
+  //     reader.onloadend = () => {
+  //       this.setState({ loading: false, thumb: reader.result });
+  //     };
+
+  //     reader.readAsDataURL(nextProps.file);
+  //   });
+  // }
+
 
 
 const Answers = ({ question, name }) => (
@@ -85,19 +121,40 @@ const Answers = ({ question, name }) => (
       <div style={{ marginTop: "8px", backgroundColor: "rgba(0,0,0,0" }}>
         {question.answers.length > 0 &&
           question.answers.map((answer, index) => (
-            <div key={index}>
-              <Field name={`${name}.${index}`} type="text" />
+            <div className="row answerGroup" key={index}>
+             
+              <div className="col">
+                <label htmlFor={`${name}.${index}.header`}>Odpowiedź</label>
+                <Field name={`${name}.${index}.header`} type="text" placeholder="" />
+              </div>
+              <div className="col">
+                <label htmlFor={`${name}.${index}.teaser`}>Dodatkowe informacje odpowiedzi</label>
+                <Field name={`${name}.${index}.teaser`} type="text" placeholder="" />
+              </div>
+              <div className="col">
+                <label htmlFor={`${name}.${index}.scale`}>Punkty za odpowiedź</label>
+                <Field name={`${name}.${index}.scale`} type="number" min="0" max="100" />
+              </div>
+              
               <button
                 type="button"
                 onClick={() => arrayHelpers.remove(index)}
                 style={{ marginTop: "8px"}}
               >
-                Usuń odpowiedź
+                Usuń grupę informacji dotyczących odpowiedzi
               </button>
             </div>
           ))}
       
-          <button type="button" onClick={() => arrayHelpers.push("")} style={{ marginTop: "8px"}}>
+          <button 
+          type="button" 
+          className="secondary"
+          onClick={() => arrayHelpers.push({ 
+            header: '', 
+            teaser: '',
+            scale: 0
+          })}
+          style={{ marginTop: "8px"}}>
             Dodaj odpowiedź
           </button>
       </div>
@@ -105,8 +162,24 @@ const Answers = ({ question, name }) => (
   />
 );
 
+function previewFile() {
+  const preview = document.querySelector('img');
+  const file = document.querySelector('input[type=file]').files[0];
+  const reader = new FileReader();
+
+  reader.addEventListener("load", () => {
+    // convert image file to base64 string
+    preview.src = reader.result;
+  }, false);
+
+  if (file) {
+    reader.readAsDataURL(file);
+  }
+}
+
 // And now we can use these
 const QuizForm = () => {
+
   return (
     <>
       <h1>Dane Quizu</h1>
@@ -114,11 +187,16 @@ const QuizForm = () => {
         initialValues={{
           title: "",
           teaser: "",
+          file: null,
           questions: [
             {
               header: '',
               teaser: '',
-              answers: []
+              answers: [{
+                header: '', 
+                teaser: '',
+                scale: 0
+              }]
             },
           ],
         }}
@@ -139,7 +217,7 @@ const QuizForm = () => {
           console.log(values, 'values')
         }}
       >
-          {({ values }) => (
+          {({ values, setFieldValue }) => (
         
         <Form>
           <MyTextInput
@@ -148,17 +226,22 @@ const QuizForm = () => {
             type="text"
             placeholder=""
           />
-          {/* <MyTextInput
-            label="Teaser"
-            name="teaser"
-            type="text"
-            placeholder=""
-          /> */}
+    
           <label htmlFor="teaser">Opis</label>
           <Field 
           as="textarea" 
           label="Teaser"
           name="teaser" placeholder='' />
+
+          <div className="form-group">
+            <label htmlFor="file">Zdjęcie</label>
+            <input id="file" name="file" type="file" onChange={(event) => {
+              setFieldValue("file", event.currentTarget.files[0]);
+              setTimeout(previewFile, 1000)
+            }} className="form-control" />
+            {/* {values.file !== null && <Thumb file={values.file} />} */}
+         { values.file !== null && <img src="" height="200" alt=""/>}
+          </div>
 
         <h3>Pytania</h3>
         <FieldArray name="questions">
@@ -204,7 +287,7 @@ const QuizForm = () => {
                     <div className="col">
                       <button
                         type="button"
-                        className="secondary"
+                        className="deleteQuestionGroup"
                         onClick={() => remove(index)}
                       >
                         Usuń pytanie i odpowiedzi
@@ -218,7 +301,11 @@ const QuizForm = () => {
                 onClick={() => push({ 
                   header: '', 
                   teaser: '',
-                  answers: [] 
+                  answers: [{
+                    header: '', 
+                    teaser: '',
+                    scale: 0
+                  }] 
                 })}
               >
               Dodaj pytanie
