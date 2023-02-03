@@ -38,15 +38,15 @@ const Answers = ({ question, name, setFieldValue }) => (
                 <Field name={`${name}.${index}.scale`} type="number" min="0" max="100" />
               </div>
               <div className="form-group">
-                <label htmlFor={`${name}.${index}.file`}>Zdjęcie</label>
+                <label htmlFor={`${name}.${index}.photo`}>Zdjęcie</label>
                 <input 
-                id={`${name}.${index}.file`} 
-                name={`${name}.${index}.file`}  
+                id={`${name}.${index}.photo`} 
+                name={`${name}.${index}.photo`}  
                 type="file" 
                 onChange={(event) => {
-                  setFieldValue(`${name}.${index}.file`, event.currentTarget.files[0]);
+                  setFieldValue(`${name}.${index}.photo`, event.currentTarget.files[0]);
                   setTimeout(()=>(
-                    previewFile(`${name}.${index}.file`, `${name}${index}img${index}`)), 1000)
+                    previewPhoto(`${name}.${index}.photo`, `${name}${index}img${index}`)), 1000)
                 }} className="form-control" />
                   <img id={`${name}${index}img${index}`} src="" height="200" alt=""/>
               </div>
@@ -68,7 +68,7 @@ const Answers = ({ question, name, setFieldValue }) => (
             header: '', 
             teaser: '',
             scale: 0,
-            file: null
+            photo: null
           })}
           style={{ marginTop: "8px"}}>
             Dodaj odpowiedź
@@ -78,32 +78,16 @@ const Answers = ({ question, name, setFieldValue }) => (
   />
 );
 
-// const Fileinput = ({ label, ...props }) => {
-//   const [field, meta] = useField(props);
-//   const fileInputs = document.querySelectorAll('input[type=file]');
-//   // name={`${name}.${index}
-//   return (
-//     <>
-//       <label htmlFor={props.id || props.name}>{label}</label>
-//       <input className="text-input" {...field} {...props} />
-//       {meta.touched && meta.error ? (
-//         <div className="error">{meta.error}</div>
-//       ) : null}
-//     </>
-//   );
-// };
-
-function previewFile(inputId, imgId) {
-  console.log(document.getElementById(inputId).files)
+function previewPhoto(inputId, imgId) {
   const preview = document.getElementById(imgId);
-  const file = document.getElementById(inputId).files[0];
+  const photo = document.getElementById(inputId).files[0];
   const reader = new FileReader();
   reader.addEventListener("load", () => {
     preview.src = reader.result;
   }, false);
 
-  if (file) {
-    reader.readAsDataURL(file);
+  if (photo) {
+    reader.readAsDataURL(photo);
   }
 }
 
@@ -115,17 +99,18 @@ const QuizForm = () => {
         initialValues={{
           title: "",
           teaser: "",
-          file: null,
+          photo: null,
           questions: [
             {
               header: '',
               teaser: '',
-              file: null,
+              bodytext: '',
+              photo: null,
               answers: [{
                 header: '', 
                 teaser: '',
                 scale: 0,
-                file: null
+                photo: null
               }]
             },
           ],
@@ -164,12 +149,12 @@ const QuizForm = () => {
           name="teaser" placeholder='' />
 {/* główne zdjecie */}
           <div className="form-group">
-            <label htmlFor="file">Zdjęcie główne</label>
-            <input id="file" name="file" type="file" onChange={(event) => {
-              setFieldValue("file", event.currentTarget.files[0]);
-              setTimeout(()=>(previewFile('file', 'fileimg')), 1000)
+            <label htmlFor="photo">Zdjęcie główne</label>
+            <input id="photo" name="photo" type="file" onChange={(event) => {
+              setFieldValue("photo", event.currentTarget.files[0]);
+              setTimeout(()=>(previewPhoto('photo', 'photoimg')), 1000)
             }} className="form-control" />
-         { values.file !== null && <img id="fileimg" src="" height="200" alt=""/>}
+         { values.photo !== null && <img id="photoimg" src="" height="200" alt=""/>}
           </div>
 
         <h3>Pytania</h3>
@@ -206,16 +191,22 @@ const QuizForm = () => {
                       />
                     </div>
 
+                    <label htmlFor={`questions.${index}.bodytext`}>Opis</label>
+                    <Field 
+                    as="textarea" 
+                    label={`questions.${index}.bodytext`}
+                    name={`questions.${index}.bodytext`} placeholder='' />
+
                     <div className="form-group">
-                      <label htmlFor={`questions.${index}.file`}>Zdjęcie</label>
+                      <label htmlFor={`questions.${index}.photo`}>Zdjęcie</label>
                       <input 
-                      id={`questions.${index}.file`} 
-                      name={`questions.${index}.file`}  
+                      id={`questions.${index}.photo`} 
+                      name={`questions.${index}.photo`}  
                       type="file" 
                       onChange={(event) => {
-                        setFieldValue(`questions.${index}.file`, event.currentTarget.files[0]);
+                        setFieldValue(`questions.${index}.photo`, event.currentTarget.files[0]);
                         setTimeout(()=>(
-                          previewFile(`questions.${index}.file`, `questions${index}img${index}`)), 1000)
+                          previewPhoto(`questions.${index}.photo`, `questions${index}img${index}`)), 1000)
                       }} className="form-control" />
                        <img id={`questions${index}img${index}`} src="" height="200" alt=""/>
                     </div>
@@ -246,11 +237,13 @@ const QuizForm = () => {
                 onClick={() => push({ 
                   header: '', 
                   teaser: '',
-                  file: null,
+                  bodytext:'',
+                  photo: null,
                   answers: [{
                     header: '', 
                     teaser: '',
-                    scale: 0
+                    scale: 0,
+                    photo: null
                   }] 
                 })}
               >
