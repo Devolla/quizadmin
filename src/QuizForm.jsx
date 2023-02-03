@@ -16,10 +16,10 @@ const MyTextInput = ({ label, ...props }) => {
   );
 };
 
-const Answers = ({ question, name }) => (
+const Answers = ({ question, name, setFieldValue }) => (
   <FieldArray
     name={name}
-    render={arrayHelpers => (
+    render={( arrayHelpers )=> (
       <div style={{ marginTop: "8px", backgroundColor: "rgba(0,0,0,0" }}>
         {question.answers.length > 0 &&
           question.answers.map((answer, index) => (
@@ -36,6 +36,19 @@ const Answers = ({ question, name }) => (
               <div className="col">
                 <label htmlFor={`${name}.${index}.scale`}>Punkty za odpowiedź</label>
                 <Field name={`${name}.${index}.scale`} type="number" min="0" max="100" />
+              </div>
+              <div className="form-group">
+                <label htmlFor={`${name}.${index}.file`}>Zdjęcie</label>
+                <input 
+                id={`${name}.${index}.file`} 
+                name={`${name}.${index}.file`}  
+                type="file" 
+                onChange={(event) => {
+                  setFieldValue(`${name}.${index}.file`, event.currentTarget.files[0]);
+                  setTimeout(()=>(
+                    previewFile(`${name}.${index}.file`, `${name}${index}img${index}`)), 1000)
+                }} className="form-control" />
+                  <img id={`${name}${index}img${index}`} src="" height="200" alt=""/>
               </div>
               
               <button
@@ -54,7 +67,8 @@ const Answers = ({ question, name }) => (
           onClick={() => arrayHelpers.push({ 
             header: '', 
             teaser: '',
-            scale: 0
+            scale: 0,
+            file: null
           })}
           style={{ marginTop: "8px"}}>
             Dodaj odpowiedź
@@ -64,9 +78,25 @@ const Answers = ({ question, name }) => (
   />
 );
 
-function previewFile() {
-  const preview = document.querySelector('img');
-  const file = document.querySelector('input[type=file]').files[0];
+// const Fileinput = ({ label, ...props }) => {
+//   const [field, meta] = useField(props);
+//   const fileInputs = document.querySelectorAll('input[type=file]');
+//   // name={`${name}.${index}
+//   return (
+//     <>
+//       <label htmlFor={props.id || props.name}>{label}</label>
+//       <input className="text-input" {...field} {...props} />
+//       {meta.touched && meta.error ? (
+//         <div className="error">{meta.error}</div>
+//       ) : null}
+//     </>
+//   );
+// };
+
+function previewFile(inputId, imgId) {
+  console.log(document.getElementById(inputId).files)
+  const preview = document.getElementById(imgId);
+  const file = document.getElementById(inputId).files[0];
   const reader = new FileReader();
   reader.addEventListener("load", () => {
     preview.src = reader.result;
@@ -94,7 +124,8 @@ const QuizForm = () => {
               answers: [{
                 header: '', 
                 teaser: '',
-                scale: 0
+                scale: 0,
+                file: null
               }]
             },
           ],
@@ -131,14 +162,14 @@ const QuizForm = () => {
           as="textarea" 
           label="Teaser"
           name="teaser" placeholder='' />
-
+{/* główne zdjecie */}
           <div className="form-group">
-            <label htmlFor="file">Zdjęcie</label>
+            <label htmlFor="file">Zdjęcie główne</label>
             <input id="file" name="file" type="file" onChange={(event) => {
               setFieldValue("file", event.currentTarget.files[0]);
-              setTimeout(previewFile, 1000)
+              setTimeout(()=>(previewFile('file', 'fileimg')), 1000)
             }} className="form-control" />
-         { values.file !== null && <img src="" height="200" alt=""/>}
+         { values.file !== null && <img id="fileimg" src="" height="200" alt=""/>}
           </div>
 
         <h3>Pytania</h3>
@@ -176,12 +207,17 @@ const QuizForm = () => {
                     </div>
 
                     <div className="form-group">
-                      <label htmlFor="file">Zdjęcie</label>
-                      <input id="file" name="file" type="file" onChange={(event) => {
-                        setFieldValue("file", event.currentTarget.files[0]);
-                        setTimeout(previewFile, 1000)
+                      <label htmlFor={`questions.${index}.file`}>Zdjęcie</label>
+                      <input 
+                      id={`questions.${index}.file`} 
+                      name={`questions.${index}.file`}  
+                      type="file" 
+                      onChange={(event) => {
+                        setFieldValue(`questions.${index}.file`, event.currentTarget.files[0]);
+                        setTimeout(()=>(
+                          previewFile(`questions.${index}.file`, `questions${index}img${index}`)), 1000)
                       }} className="form-control" />
-                      { values.file !== null && <img src="" height="200" alt=""/>}
+                       <img id={`questions${index}img${index}`} src="" height="200" alt=""/>
                     </div>
 
 
@@ -190,6 +226,7 @@ const QuizForm = () => {
                     <Answers
                       question={question}
                       name={`questions.${index}.answers`}
+                      setFieldValue={setFieldValue}
                     />
 
                     <div className="col">
