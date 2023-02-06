@@ -47,7 +47,8 @@ const Answers = ({ question, name, setFieldValue }) => (
                   setFieldValue(`${name}.${index}.photo`, event.currentTarget.files[0]);
                   setTimeout(()=>(
                     previewPhoto(`${name}.${index}.photo`, `${name}${index}img${index}`)), 1000)
-                }} className="form-control" />
+                }} 
+                className="form-control" />
                   <img id={`${name}${index}img${index}`} src="" height="200" alt=""/>
               </div>
               
@@ -97,9 +98,13 @@ const QuizForm = () => {
       <h1>Dane Quizu</h1>
       <Formik
         initialValues={{
-          title: "",
-          teaser: "",
+          title: '',
+          teaser: '',
           photo: null,
+          calendar:  {
+            start_time: '',
+            end_time: '',
+          },
           questions: [
             {
               header: '',
@@ -156,6 +161,26 @@ const QuizForm = () => {
             }} className="form-control" />
          { values.photo !== null && <img id="photoimg" src="" height="200" alt=""/>}
           </div>
+
+          {/* calendar */}
+          <label htmlFor="calendar.start_time">Start quizu</label>
+          <Field 
+          type="datetime-local"
+          label="Start quizu"
+          // min="2023-01-01T00:00" max="2023-04-30T00:00"
+          name="calendar.start_time" 
+          required 
+          // pattern="\d{4}-\d{2}-\d{2}"
+           />
+          <label htmlFor="calendar.end_time">Koniec Quizu</label>
+          <Field 
+           type="datetime-local"
+           label="Koniec quizu"
+           // min="2023-01-01T00:00" max="2023-04-30T00:00"
+           name="calendar.end_time" 
+           required 
+          //  pattern="\d{4}-\d{2}-\d{2}"
+            />
 
         <h3>Pytania</h3>
         <FieldArray name="questions">
