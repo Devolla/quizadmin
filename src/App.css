@@ -710,6 +710,9 @@ form {
   flex-basis: unset;
   flex-grow: unset;
 }
+.col {
+  margin-top: 8px;
+}
 
 .questionGroup h4 {
   display: block;

@@ -65,7 +65,7 @@ const Answers = ({ question, name, setFieldValue }) => (
                 <label htmlFor={`${name}.${index}.scale`}>Punkty za odpowiedź</label>
                 <Field name={`${name}.${index}.scale`} type="number" min="0" max="100" />
               </div>
-              <div className="form-group">
+              <div className="col form-group">
                 <label htmlFor={`${name}.${index}.photo`}>Zdjęcie</label>
                 <input 
                 id={`${name}.${index}.photo`} 
@@ -261,13 +261,15 @@ const QuizForm = () => {
                       />
                     </div>
 
+                    <div className="col">
                     <label htmlFor={`questions.${index}.bodytext`}>Opis</label>
                     <Field 
                     as="textarea" 
                     label={`questions.${index}.bodytext`}
                     name={`questions.${index}.bodytext`} placeholder='' />
+                    </div>
 
-                    <div className="form-group">
+                    <div className="form-group col">
                       <label htmlFor={`questions.${index}.photo`}>Zdjęcie</label>
                       <input 
                       id={`questions.${index}.photo`} 
