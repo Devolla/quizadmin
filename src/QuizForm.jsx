@@ -14,7 +14,7 @@ import {
 
 var rteObj;
 function renderRTEField({ input, label, type }) {
-  debugger;
+  // debugger;
   return (
     <>
       <RichTextEditorComponent
@@ -162,7 +162,8 @@ const QuizForm = () => {
         //   setSubmitting(false);
         // }}
         onSubmit={values => {
-          values.comment = rteObj.getText();
+          // console.log(rteObj.value)
+          values.comment = rteObj.value;
           alert(JSON.stringify(values, null, 2));
           console.log(values, 'values')
         }}
@@ -199,7 +200,7 @@ const QuizForm = () => {
           label="Start quizu"
           // min="2023-01-01T00:00" max="2023-04-30T00:00"
           name="calendar.start_time" 
-          required 
+          // required 
           // pattern="\d{4}-\d{2}-\d{2}"
            />
           <label htmlFor="calendar.end_time">Koniec Quizu</label>
@@ -208,7 +209,7 @@ const QuizForm = () => {
            label="Koniec quizu"
            // min="2023-01-01T00:00" max="2023-04-30T00:00"
            name="calendar.end_time" 
-           required 
+          //  required 
           //  pattern="\d{4}-\d{2}-\d{2}"
             />
 

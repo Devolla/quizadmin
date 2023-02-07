@@ -705,3 +705,20 @@ form {
 .deleteQuestionGroup {
   font-size: 15px
 }
+
+.questionGroup .col {
+  flex-basis: unset;
+  flex-grow: unset;
+}
+
+.questionGroup h4 {
+  display: block;
+  width: 100%;
+}
+#defaultRTE {
+  margin-top: 30px;
+}
+
+/* body > div:not(#root) {
+  display: none;
+} */
