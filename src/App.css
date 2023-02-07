@@ -715,8 +715,8 @@ form {
   display: block;
   width: 100%;
 }
-#defaultRTE {
-  margin-top: 30px;
+button {
+  margin: 15px 0;
 }
 
 /* body > div:not(#root) {

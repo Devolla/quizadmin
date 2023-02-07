@@ -22,7 +22,7 @@ function renderRTEField({ input, label, type }) {
           rteObj = richtexteditor;
         }}
         saveInterval="1"
-        htmlAttributes={{ name: "comment" }}
+        htmlAttributes={{ name: "txteditor" }}
         id="defaultRTE"
       >
         <Inject services={[HtmlEditor, Toolbar, Image, Link, QuickToolbar]} />
@@ -77,13 +77,17 @@ const Answers = ({ question, name, setFieldValue }) => (
                     previewPhoto(`${name}.${index}.photo`, `${name}${index}img${index}`)), 1000)
                 }} 
                 className="form-control" />
-                  <img id={`${name}${index}img${index}`} src="" height="200" alt=""/>
+                  {/* { name.index.photo !== null &&  */}
+                  <img id={`${name}${index}img${index}`} 
+                   style={{ marginTop: "30px", marginBottom:"15px", display:"block", maxHeight:"200px"}} 
+                  src="" height="" alt=""/>
+                  {/* } */}
               </div>
               
               <button
                 type="button"
                 onClick={() => arrayHelpers.remove(index)}
-                style={{ marginTop: "8px"}}
+                style={{ marginTop: "25px", marginBottom:"20px"}}
               >
                 Usuń grupę informacji dotyczących odpowiedzi
               </button>
@@ -99,7 +103,8 @@ const Answers = ({ question, name, setFieldValue }) => (
             scale: 0,
             photo: null
           })}
-          style={{ marginTop: "8px"}}>
+          // style={{ marginTop: "8px"}}
+          >
             Dodaj odpowiedź
           </button>
       </div>
@@ -133,7 +138,7 @@ const QuizForm = () => {
             start_time: '',
             end_time: '',
           },
-          comment: '',
+          txteditor: '',
           questions: [
             {
               header: '',
@@ -163,7 +168,7 @@ const QuizForm = () => {
         // }}
         onSubmit={values => {
           // console.log(rteObj.value)
-          values.comment = rteObj.value;
+          values.txteditor = rteObj.value;
           alert(JSON.stringify(values, null, 2));
           console.log(values, 'values')
         }}
@@ -183,6 +188,12 @@ const QuizForm = () => {
           as="textarea" 
           label="Teaser"
           name="teaser" placeholder='' />
+
+          {/* description texteditor */}
+          <label htmlFor="txteditor">Opis w text editor</label>
+          <Field name="txteditor" component={renderRTEField} label="txteditor" />
+          
+
 {/* główne zdjecie */}
           <div className="form-group">
             <label htmlFor="photo">Zdjęcie główne</label>
@@ -190,7 +201,10 @@ const QuizForm = () => {
               setFieldValue("photo", event.currentTarget.files[0]);
               setTimeout(()=>(previewPhoto('photo', 'photoimg')), 1000)
             }} className="form-control" />
-         { values.photo !== null && <img id="photoimg" src="" height="200" alt=""/>}
+         { values.photo !== null && <img id="photoimg" src="" 
+         height="200" 
+         style={{ marginTop: "30px", marginBottom:"30px", display:"block"}} 
+         alt=""/>}
           </div>
 
           {/* calendar */}
@@ -212,10 +226,6 @@ const QuizForm = () => {
           //  required 
           //  pattern="\d{4}-\d{2}-\d{2}"
             />
-
-            {/* description texteditor */}
-            <Field name="comment" component={renderRTEField} label="Comment" />
-          
 
         <h3>Pytania</h3>
         <FieldArray name="questions">
@@ -268,7 +278,12 @@ const QuizForm = () => {
                         setTimeout(()=>(
                           previewPhoto(`questions.${index}.photo`, `questions${index}img${index}`)), 1000)
                       }} className="form-control" />
-                       <img id={`questions${index}img${index}`} src="" height="200" alt=""/>
+                        {/* { values.questions.index.photo !== null &&  */}
+                       <img id={`questions${index}img${index}`} 
+                       src="" height=""
+                       style={{ maxHeight:"200px", marginTop: "30px", marginBottom:"15px", display:"block"}} 
+                       alt=""/>
+                       {/* } */}
                     </div>
 
 
