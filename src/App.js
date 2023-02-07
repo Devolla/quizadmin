@@ -1,4 +1,3 @@
-
 import './App.css';
 import QuizForm from './QuizForm';
 

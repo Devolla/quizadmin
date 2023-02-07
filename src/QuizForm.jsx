@@ -12,6 +12,25 @@ import {
   Toolbar
 } from "@syncfusion/ej2-react-richtexteditor";
 
+var rteObj;
+function renderRTEField({ input, label, type }) {
+  debugger;
+  return (
+    <>
+      <RichTextEditorComponent
+        ref={(richtexteditor) => {
+          rteObj = richtexteditor;
+        }}
+        saveInterval="1"
+        htmlAttributes={{ name: "comment" }}
+        id="defaultRTE"
+      >
+        <Inject services={[HtmlEditor, Toolbar, Image, Link, QuickToolbar]} />
+      </RichTextEditorComponent>
+    </>
+  );
+}
+
 const MyTextInput = ({ label, ...props }) => {
   const [field, meta] = useField(props);
   return (
@@ -114,7 +133,7 @@ const QuizForm = () => {
             start_time: '',
             end_time: '',
           },
-          description: '',
+          comment: '',
           questions: [
             {
               header: '',
@@ -143,6 +162,7 @@ const QuizForm = () => {
         //   setSubmitting(false);
         // }}
         onSubmit={values => {
+          values.comment = rteObj.getText();
           alert(JSON.stringify(values, null, 2));
           console.log(values, 'values')
         }}
@@ -193,7 +213,8 @@ const QuizForm = () => {
             />
 
             {/* description texteditor */}
-
+            <Field name="comment" component={renderRTEField} label="Comment" />
+          
 
         <h3>Pytania</h3>
         <FieldArray name="questions">
