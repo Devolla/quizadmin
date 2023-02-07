@@ -2,6 +2,15 @@ import React from "react";
 import { Formik, Form, Field, ErrorMessage, useField, FieldArray } from "formik";
 import * as Yup from "yup";
 import "./App.css";
+import {
+  HtmlEditor,
+  Image,
+  Inject,
+  Link,
+  QuickToolbar,
+  RichTextEditorComponent,
+  Toolbar
+} from "@syncfusion/ej2-react-richtexteditor";
 
 const MyTextInput = ({ label, ...props }) => {
   const [field, meta] = useField(props);
@@ -105,6 +114,7 @@ const QuizForm = () => {
             start_time: '',
             end_time: '',
           },
+          description: '',
           questions: [
             {
               header: '',
@@ -181,6 +191,9 @@ const QuizForm = () => {
            required 
           //  pattern="\d{4}-\d{2}-\d{2}"
             />
+
+            {/* description texteditor */}
+
 
         <h3>Pytania</h3>
         <FieldArray name="questions">
