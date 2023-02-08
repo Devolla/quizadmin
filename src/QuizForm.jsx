@@ -83,14 +83,15 @@ const Answers = ({ question, name, setFieldValue }) => (
                   src="" height="" alt=""/>
                   {/* } */}
               </div>
-              
-              <button
-                type="button"
-                onClick={() => arrayHelpers.remove(index)}
-                style={{ marginTop: "25px", marginBottom:"20px"}}
-              >
-                Usuń grupę informacji dotyczących odpowiedzi
-              </button>
+              <div className="col">
+                <button
+                  type="button"
+                  onClick={() => arrayHelpers.remove(index)}
+                  style={{ marginTop: "25px", marginBottom:"20px"}}
+                >
+                  Usuń grupę informacji dotyczących odpowiedzi
+                </button>
+              </div>
             </div>
           ))}
       
