@@ -114,6 +114,7 @@ const Answers = ({ question, name, setFieldValue }) => (
 );
 
 function previewPhoto(inputId, imgId) {
+  console.log(inputId, imgId)
   const preview = document.getElementById(imgId);
   const photo = document.getElementById(inputId).files[0];
   const reader = new FileReader();
@@ -123,6 +124,9 @@ function previewPhoto(inputId, imgId) {
 
   if (photo) {
     reader.readAsDataURL(photo);
+    preview.style.display = "block";
+  } else {
+    preview.style.display = "none";
   }
 }
 
