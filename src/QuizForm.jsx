@@ -1,35 +1,59 @@
-import React from "react";
+import React, { useState } from "react";
 import { Formik, Form, Field, ErrorMessage, useField, FieldArray } from "formik";
 import * as Yup from "yup";
 import "./App.css";
-import {
-  HtmlEditor,
-  Image,
-  Inject,
-  Link,
-  QuickToolbar,
-  RichTextEditorComponent,
-  Toolbar
-} from "@syncfusion/ej2-react-richtexteditor";
+// import {
+//   HtmlEditor,
+//   Image,
+//   Inject,
+//   Link,
+//   QuickToolbar,
+//   RichTextEditorComponent,
+//   Toolbar
+// } from "@syncfusion/ej2-react-richtexteditor";
 
-var rteObj;
-function renderRTEField({ input, label, type }) {
-  // debugger;
-  return (
-    <>
-      <RichTextEditorComponent
-        ref={(richtexteditor) => {
-          rteObj = richtexteditor;
-        }}
-        saveInterval="1"
-        htmlAttributes={{ name: "txteditor" }}
-        id="defaultRTE"
-      >
-        <Inject services={[HtmlEditor, Toolbar, Image, Link, QuickToolbar]} />
-      </RichTextEditorComponent>
-    </>
+// import { Component } from 'react';
+import { Editor } from 'react-draft-wysiwyg';
+import '../node_modules/react-draft-wysiwyg/dist/react-draft-wysiwyg.css';
+import { convertToRaw, ContentState, EditorState } from "draft-js";
+import draftToHtml from "draftjs-to-html";
+import htmlToDraft from "html-to-draftjs";
+
+
+const TextEditor = ({ value, setFieldValue }) => {
+  const prepareDraft = (value) => {
+    const draft = htmlToDraft(value);
+    const contentState = ContentState.createFromBlockArray(draft.contentBlocks);
+    const editorState = EditorState.createWithContent(contentState);
+    return editorState;
+  };
+
+  const [editorState, setEditorState] = useState(
+    value ? prepareDraft(value) : EditorState.createEmpty()
   );
-}
+
+  const onEditorStateChange = (editorState) => {
+    const forFormik = draftToHtml(
+      convertToRaw(editorState.getCurrentContent())
+    );
+    setFieldValue(forFormik);
+    setEditorState(editorState);
+  };
+  return (
+    <div>
+      <Editor
+        editorState={editorState}
+        wrapperClassName="custom-wrapper"
+        editorClassName="custom-editor"
+        onEditorStateChange={onEditorStateChange}
+      />
+    </div>
+  );
+};
+
+
+
+
 
 const MyTextInput = ({ label, ...props }) => {
   const [field, meta] = useField(props);
@@ -172,8 +196,8 @@ const QuizForm = () => {
         //   setSubmitting(false);
         // }}
         onSubmit={values => {
-          // console.log(rteObj.value)
-          values.txteditor = rteObj.value;
+          // console.log(rteObj)
+          // values.txteditor = rteObj.value;
           alert(JSON.stringify(values, null, 2));
           console.log(values, 'values')
         }}
@@ -194,10 +218,15 @@ const QuizForm = () => {
           label="Teaser"
           name="teaser" placeholder='' />
 
+         
+
           {/* description texteditor */}
           <label htmlFor="txteditor">Opis w text editor</label>
-          <Field name="txteditor" component={renderRTEField} label="txteditor" />
-          
+          {/* <Field name="txteditor" component={renderRTEField} label="txteditor" /> */}
+          <TextEditor
+          setFieldValue={(val) => setFieldValue("txteditor", val)}
+          value={values.txteditor}
+        />
 
 {/* główne zdjecie */}
           <div className="form-group">
