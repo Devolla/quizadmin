@@ -20,7 +20,9 @@ import draftToHtml from "draftjs-to-html";
 import htmlToDraft from "html-to-draftjs";
 
 
+
 const TextEditor = ({ value, setFieldValue }) => {
+  console.log(value)
   const prepareDraft = (value) => {
     const draft = htmlToDraft(value);
     const contentState = ContentState.createFromBlockArray(draft.contentBlocks);
@@ -50,6 +52,11 @@ const TextEditor = ({ value, setFieldValue }) => {
     </div>
   );
 };
+
+TextEditor.defaultProps = {
+  value: "dupa"
+}
+  
 
 
 
