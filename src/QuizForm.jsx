@@ -22,7 +22,7 @@ import htmlToDraft from "html-to-draftjs";
 
 
 const TextEditor = ({ value, setFieldValue }) => {
-  console.log(value)
+  // console.log(setFieldValue)
   const prepareDraft = (value) => {
     const draft = htmlToDraft(value);
     const contentState = ContentState.createFromBlockArray(draft.contentBlocks);
@@ -48,13 +48,26 @@ const TextEditor = ({ value, setFieldValue }) => {
         wrapperClassName="custom-wrapper"
         editorClassName="custom-editor"
         onEditorStateChange={onEditorStateChange}
+        // toolbar={{
+        //   options: [
+        //     "inline",
+        //     "blockType",
+        //     // "fontSize",
+        //     "fontFamily",
+        //     "list",
+        //     "textAlign",
+        //     "colorPicker",
+        //     "remove",
+        //     "history",
+        //   ],
+        // }}
       />
     </div>
   );
 };
 
 TextEditor.defaultProps = {
-  value: "dupa"
+  value: ""
 }
   
 
@@ -231,7 +244,7 @@ const QuizForm = () => {
           <label htmlFor="txteditor">Opis w text editor</label>
           {/* <Field name="txteditor" component={renderRTEField} label="txteditor" /> */}
           <TextEditor
-          setFieldValue={(val) => setFieldValue("txteditor", val)}
+          setFieldValue={(val) => {setFieldValue("txteditor", val)}}
           value={values.txteditor}
         />
 
