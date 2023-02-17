@@ -18,6 +18,7 @@ import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
 import { convertToRaw, ContentState, EditorState } from "draft-js";
 import draftToHtml from "draftjs-to-html";
 import htmlToDraft from "html-to-draftjs";
+import { Persist } from 'formik-persist';
 
 
 
@@ -384,6 +385,7 @@ const QuizForm = () => {
           )}
         </FieldArray>
           <button type="submit">Submit</button>
+          <Persist name="signup-form" />
         </Form>
           )}
       </Formik>
