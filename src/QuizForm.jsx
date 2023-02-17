@@ -67,9 +67,9 @@ const TextEditor = ({ value, setFieldValue }) => {
   );
 };
 
-TextEditor.defaultProps = {
-  value: ""
-}
+// TextEditor.defaultProps = {
+//   value: ""
+// }
   
 
 
@@ -220,7 +220,7 @@ const QuizForm = () => {
           // console.log(rteObj)
           // values.txteditor = rteObj.value;
           alert(JSON.stringify(values, null, 2));
-          console.log(values, 'values')
+          console.log(JSON.stringify(values, null, 2), 'values')
         }}
       >
           {({ values, setFieldValue }) => (
