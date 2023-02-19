@@ -19,17 +19,25 @@ import { convertToRaw, ContentState, EditorState } from "draft-js";
 import draftToHtml from "draftjs-to-html";
 import htmlToDraft from "html-to-draftjs";
 import { Persist } from 'formik-persist';
+// import { forEach } from "lodash";
 
-function saveImageToSession(inputId, image) {
-  const imageObj = document.getElementById(inputId).files[0];
-  console.log(imageObj)
-  window.localStorage.setItem(inputId, JSON.stringify(imageObj));
+function prepareImgObjToSend(file, imgSrc) {
+  const fileObject = file;
+   const newObject  = {
+    'lastModified'     : fileObject.lastModified,
+    'lastModifiedDate' : fileObject.lastModifiedDate,
+    'name'             : fileObject.name,
+    'size'             : fileObject.size,
+    'type'             : fileObject.type,
+    'src'              : imgSrc
+ };  
+ return newObject;
 }
 
 const allFormValues = JSON.parse(window.localStorage.getItem('signup-form'));
-console.log(allFormValues)
-let editorValue = allFormValues === null ? "" : allFormValues.values.txteditor;
-console.log(editorValue)
+// console.log(allFormValues, 'allFormValues')
+
+
 const TextEditor = ({ value, setFieldValue }) => {
   // console.log(setFieldValue)
   const prepareDraft = (value) => {
@@ -39,6 +47,7 @@ const TextEditor = ({ value, setFieldValue }) => {
     return editorState;
   };
 
+  let editorValue = allFormValues === null ? "" : allFormValues.values.txteditor;
   const [editorState, setEditorState] = useState(
     value ? prepareDraft(value) : prepareDraft(editorValue)
     // value ? prepareDraft(value) : EditorState.createEmpty()
@@ -117,13 +126,19 @@ const Answers = ({ question, name, setFieldValue }) => (
                 name={`${name}.${index}.photo`}  
                 type="file" 
                 onChange={(event) => {
-                  setFieldValue(`${name}.${index}.photo`, event.currentTarget.files[0]);
+                  const newObject = prepareImgObjToSend(event.currentTarget.files[0], `${name}${index}img${index}`, `${name}.${index}.photo`);
+                  setFieldValue(`${name}.${index}.photo`, newObject);
                   setTimeout(()=>(
                     previewPhoto(`${name}.${index}.photo`, `${name}${index}img${index}`)), 1000)
                 }} 
+                // onLoad={()=> allFormValues === null ? console.log('dupa') : previewPhoto(allFormValues.values.name.index.photo, `${name}${index}img${index}`)}
+                 
                 className="form-control" />
                   {/* { name.index.photo !== null &&  */}
-                  <img id={`${name}${index}img${index}`} 
+                  <img
+                  className="formImg"
+                  data-path={`${name}.${index}.photo`}
+                   id={`${name}${index}img${index}`} 
                    style={{ marginTop: "30px", marginBottom:"15px", display:"block", maxHeight:"200px"}} 
                   src="" height="" alt=""/>
                   {/* } */}
@@ -159,9 +174,9 @@ const Answers = ({ question, name, setFieldValue }) => (
 );
 
 function previewPhoto(inputId, imgId) {
-  console.log(inputId, imgId)
-  const preview = document.getElementById(imgId);
   const photo = document.getElementById(inputId).files[0];
+  console.log(photo, 'files z prewiew')
+  const preview = document.getElementById(imgId);
   const reader = new FileReader();
   reader.addEventListener("load", () => {
     preview.src = reader.result;
@@ -220,7 +235,7 @@ const QuizForm = () => {
           // console.log(rteObj)
           // values.txteditor = rteObj.value;
           alert(JSON.stringify(values, null, 2));
-          console.log(JSON.stringify(values, null, 2), 'values')
+          console.log(JSON.stringify(values), 'values')
         }}
       >
           {({ values, setFieldValue }) => (
@@ -254,12 +269,29 @@ const QuizForm = () => {
 {/* główne zdjecie */}
           <div className="form-group">
             <label htmlFor="photo">Zdjęcie główne</label>
-            <input id="photo" name="photo" type="file" onChange={(event) => {
-              setFieldValue("photo", event.currentTarget.files[0]);
-              saveImageToSession('photo',event.currentTarget.files[0]);
-              setTimeout(()=>(previewPhoto('photo', 'photoimg')), 1000)
-            }} className="form-control" />
-         { values.photo !== null && <img id="photoimg" src="" 
+            <input id="photo" name="photo" type="file" 
+            onChange={(event) => {
+              setTimeout(()=>(previewPhoto('photo', 'photoimg')), 1000);
+              const img = document.getElementById('photoimg');
+              const imgSrc = img.src;
+              const newObject = prepareImgObjToSend(event.currentTarget.files[0], imgSrc);
+              setFieldValue("photo", newObject);
+              setTimeout(imgUpdate, 1100)
+              function imgUpdate() {
+                const img = document.getElementById('photoimg');
+                const imgSrc = img.src;
+                newObject.src = imgSrc;
+                setFieldValue("photo", newObject);
+              }
+            }} 
+            className="form-control" 
+            />
+         { values.photo !== null && <img 
+          className="formImg"
+          data-path="photo"
+         id="photoimg" 
+          //  onLoad={allFormValues === null ? console.log('dupa') : previewPhoto(allFormValues.values['photo'], 'photoimg')} 
+           src={allFormValues === null ? '' : allFormValues.values['photo'].src } 
          height="200" 
          style={{ marginTop: "30px", marginBottom:"30px", display:"block"}} 
          alt=""/>}
@@ -334,12 +366,16 @@ const QuizForm = () => {
                       name={`questions.${index}.photo`}  
                       type="file" 
                       onChange={(event) => {
-                        setFieldValue(`questions.${index}.photo`, event.currentTarget.files[0]);
+                        const newObject = prepareImgObjToSend(event.currentTarget.files[0], `questions${index}img${index}`, `questions.${index}.photo`);
+                        setFieldValue(`questions.${index}.photo`, newObject);
                         setTimeout(()=>(
                           previewPhoto(`questions.${index}.photo`, `questions${index}img${index}`)), 1000)
                       }} className="form-control" />
                         {/* { values.questions.index.photo !== null &&  */}
-                       <img id={`questions${index}img${index}`} 
+                       <img 
+                        className="formImg"
+                        data-path={`questions.${index}.photo`}
+                       id={`questions${index}img${index}`} 
                        src="" height=""
                        style={{ maxHeight:"200px", marginTop: "30px", marginBottom:"15px", display:"block"}} 
                        alt=""/>
