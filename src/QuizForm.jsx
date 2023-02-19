@@ -13,11 +13,12 @@ import "./App.css";
 // } from "@syncfusion/ej2-react-richtexteditor";
 
 // import { Component } from 'react';
-import { Editor } from 'react-draft-wysiwyg';
-import '../node_modules/react-draft-wysiwyg/dist/react-draft-wysiwyg.css';
+import { Editor } from "react-draft-wysiwyg";
+import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
 import { convertToRaw, ContentState, EditorState } from "draft-js";
 import draftToHtml from "draftjs-to-html";
 import htmlToDraft from "html-to-draftjs";
+import { Persist } from 'formik-persist';
 
 function saveImageToSession(inputId, image) {
   const imageObj = document.getElementById(inputId).files[0];
@@ -70,9 +71,9 @@ const TextEditor = ({ value, setFieldValue }) => {
   );
 };
 
-TextEditor.defaultProps = {
-  value: ""
-}
+// TextEditor.defaultProps = {
+//   value: ""
+// }
   
 const MyTextInput = ({ label, ...props }) => {
   const [field, meta] = useField(props);
@@ -218,7 +219,7 @@ const QuizForm = () => {
           // console.log(rteObj)
           // values.txteditor = rteObj.value;
           alert(JSON.stringify(values, null, 2));
-          console.log(values, 'values')
+          console.log(JSON.stringify(values, null, 2), 'values')
         }}
       >
           {({ values, setFieldValue }) => (
@@ -384,6 +385,7 @@ const QuizForm = () => {
           )}
         </FieldArray>
           <button type="submit">Submit</button>
+          <Persist name="signup-form" />
         </Form>
           )}
       </Formik>
