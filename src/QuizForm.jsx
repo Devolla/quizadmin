@@ -26,6 +26,10 @@ function saveImageToSession(inputId, image) {
   window.localStorage.setItem(inputId, JSON.stringify(imageObj));
 }
 
+const allFormValues = JSON.parse(window.localStorage.getItem('signup-form'));
+console.log(allFormValues)
+let editorValue = allFormValues === null ? "" : allFormValues.values.txteditor;
+console.log(editorValue)
 const TextEditor = ({ value, setFieldValue }) => {
   // console.log(setFieldValue)
   const prepareDraft = (value) => {
@@ -36,7 +40,8 @@ const TextEditor = ({ value, setFieldValue }) => {
   };
 
   const [editorState, setEditorState] = useState(
-    value ? prepareDraft(value) : EditorState.createEmpty()
+    value ? prepareDraft(value) : prepareDraft(editorValue)
+    // value ? prepareDraft(value) : EditorState.createEmpty()
   );
 
   const onEditorStateChange = (editorState) => {
@@ -70,10 +75,6 @@ const TextEditor = ({ value, setFieldValue }) => {
     </div>
   );
 };
-
-// TextEditor.defaultProps = {
-//   value: ""
-// }
   
 const MyTextInput = ({ label, ...props }) => {
   const [field, meta] = useField(props);
@@ -243,9 +244,11 @@ const QuizForm = () => {
           {/* description texteditor */}
           <label htmlFor="txteditor">Opis w text editor</label>
           {/* <Field name="txteditor" component={renderRTEField} label="txteditor" /> */}
+         
           <TextEditor
+          name="txteditor"
           setFieldValue={(val) => {setFieldValue("txteditor", val)}}
-          value={values.txteditor}
+          // value={values.txteditor}
         />
 
 {/* główne zdjecie */}
