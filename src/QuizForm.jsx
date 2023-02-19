@@ -19,7 +19,11 @@ import { convertToRaw, ContentState, EditorState } from "draft-js";
 import draftToHtml from "draftjs-to-html";
 import htmlToDraft from "html-to-draftjs";
 
-
+function saveImageToSession(inputId, image) {
+  const imageObj = document.getElementById(inputId).files[0];
+  console.log(imageObj)
+  window.localStorage.setItem(inputId, JSON.stringify(imageObj));
+}
 
 const TextEditor = ({ value, setFieldValue }) => {
   // console.log(setFieldValue)
@@ -70,11 +74,6 @@ TextEditor.defaultProps = {
   value: ""
 }
   
-
-
-
-
-
 const MyTextInput = ({ label, ...props }) => {
   const [field, meta] = useField(props);
   return (
@@ -253,6 +252,7 @@ const QuizForm = () => {
             <label htmlFor="photo">Zdjęcie główne</label>
             <input id="photo" name="photo" type="file" onChange={(event) => {
               setFieldValue("photo", event.currentTarget.files[0]);
+              saveImageToSession('photo',event.currentTarget.files[0]);
               setTimeout(()=>(previewPhoto('photo', 'photoimg')), 1000)
             }} className="form-control" />
          { values.photo !== null && <img id="photoimg" src="" 
