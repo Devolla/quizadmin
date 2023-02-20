@@ -98,7 +98,7 @@ const MyTextInput = ({ label, ...props }) => {
   );
 };
 
-const Answers = ({ question, name, setFieldValue }) => (
+const Answers = ({ question, name, setFieldValue, name1, nameNb, name2 }) => (
   <FieldArray
     name={name}
     render={( arrayHelpers )=> (
@@ -126,10 +126,22 @@ const Answers = ({ question, name, setFieldValue }) => (
                 name={`${name}.${index}.photo`}  
                 type="file" 
                 onChange={(event) => {
-                  const newObject = prepareImgObjToSend(event.currentTarget.files[0], `${name}${index}img${index}`, `${name}.${index}.photo`);
+                  // const newObject = prepareImgObjToSend(event.currentTarget.files[0]);
+                  // setFieldValue(`${name}.${index}.photo`, newObject);
+                  // setTimeout(()=>(previewPhoto(`${name}.${index}.photo`, `${name}${index}img${index}`)), 1000);
+                  setTimeout(()=>(previewPhoto(`${name}.${index}.photo`, `${name}${index}img${index}`)), 1000);
+                  const img = document.getElementById(`${name}${index}img${index}`);
+                  const imgSrc = img.src;
+                  const newObject = prepareImgObjToSend(event.currentTarget.files[0], imgSrc);
                   setFieldValue(`${name}.${index}.photo`, newObject);
-                  setTimeout(()=>(
-                    previewPhoto(`${name}.${index}.photo`, `${name}${index}img${index}`)), 1000)
+                  setTimeout(()=>imgUpdate(name, index), 1100)
+                  function imgUpdate(name, index) {
+                    // console.log(name, index, 'name index w settime')
+                    const img = document.getElementById(`${name}${index}img${index}`);
+                    const imgSrc = img.src;
+                    newObject.src = imgSrc;
+                    setFieldValue(`${name}.${index}.photo`, newObject);
+                  }
                 }} 
                 // onLoad={()=> allFormValues === null ? console.log('dupa') : previewPhoto(allFormValues.values.name.index.photo, `${name}${index}img${index}`)}
                  
@@ -140,7 +152,8 @@ const Answers = ({ question, name, setFieldValue }) => (
                   data-path={`${name}.${index}.photo`}
                    id={`${name}${index}img${index}`} 
                    style={{ marginTop: "30px", marginBottom:"15px", display:"block", maxHeight:"200px"}} 
-                  src="" height="" alt=""/>
+                   src={(allFormValues.values[name1][nameNb] !== undefined && allFormValues.values[name1][nameNb][name2].index !== undefined) ?  allFormValues.values[name1][nameNb][name2][index].photo.src : ''} 
+                   height="" alt=""/>
                   {/* } */}
               </div>
               <div className="col">
@@ -288,7 +301,6 @@ const QuizForm = () => {
             />
          { values.photo !== null && <img 
           className="formImg"
-          data-path="photo"
          id="photoimg" 
           //  onLoad={allFormValues === null ? console.log('dupa') : previewPhoto(allFormValues.values['photo'], 'photoimg')} 
            src={allFormValues === null ? '' : allFormValues.values['photo'].src } 
@@ -360,23 +372,37 @@ const QuizForm = () => {
                     </div>
 
                     <div className="form-group col">
-                      <label htmlFor={`questions.${index}.photo`}>Zdjęcie</label>
+                      <label htmlFor={`questions.${index}.photo`}>Zdjęcie do pytania</label>
                       <input 
                       id={`questions.${index}.photo`} 
                       name={`questions.${index}.photo`}  
                       type="file" 
                       onChange={(event) => {
-                        const newObject = prepareImgObjToSend(event.currentTarget.files[0], `questions${index}img${index}`, `questions.${index}.photo`);
-                        setFieldValue(`questions.${index}.photo`, newObject);
-                        setTimeout(()=>(
-                          previewPhoto(`questions.${index}.photo`, `questions${index}img${index}`)), 1000)
-                      }} className="form-control" />
+                        // const newObject = prepareImgObjToSend(event.currentTarget.files[0], `questions${index}img${index}`, `questions.${index}.photo`);
+                        // setFieldValue(`questions.${index}.photo`, newObject);
+                        // setTimeout(()=>(previewPhoto(`questions.${index}.photo`, `questions${index}img${index}`)), 1000)
+
+                  setTimeout(()=>(previewPhoto(`questions.${index}.photo`, `questions${index}img${index}`)), 1000)
+                  const img = document.getElementById(`questions${index}img${index}`);
+                  const imgSrc = img.src;
+                  const newObject = prepareImgObjToSend(event.currentTarget.files[0], imgSrc);
+                  setFieldValue(`questions.${index}.photo`, newObject);
+                  setTimeout(()=>imgUpdate(index), 1100)
+                  function imgUpdate(index) {
+                    const img = document.getElementById(`questions${index}img${index}`);
+                    const imgSrc = img.src;
+                    newObject.src = imgSrc;
+                    setFieldValue(`questions.${index}.photo`, newObject);
+                  }
+                      }} 
+                      className="form-control" />
                         {/* { values.questions.index.photo !== null &&  */}
                        <img 
                         className="formImg"
                         data-path={`questions.${index}.photo`}
                        id={`questions${index}img${index}`} 
-                       src="" height=""
+                      //  src={(allFormValues.values['questions'] !== undefined && allFormValues.values['questions'][index] !== undefined && allFormValues.values['questions'][index].photo.src === null ) ? allFormValues.values['questions'][index].photo.src : ''} 
+                       height=""
                        style={{ maxHeight:"200px", marginTop: "30px", marginBottom:"15px", display:"block"}} 
                        alt=""/>
                        {/* } */}
@@ -388,6 +414,9 @@ const QuizForm = () => {
                     <Answers
                       question={question}
                       name={`questions.${index}.answers`}
+                      name1={'questions'}
+                      nameNb={`${index}`}
+                      name2={'answers'}
                       setFieldValue={setFieldValue}
                     />
 
