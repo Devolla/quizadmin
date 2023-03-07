@@ -35,7 +35,8 @@ function prepareImgObjToSend(file, imgSrc) {
 }
 
 const allFormValues = JSON.parse(window.localStorage.getItem('signup-form'));
-// console.log(allFormValues, 'allFormValues')
+console.log(allFormValues, 'allFormValues')
+
 
 
 const TextEditor = ({ value, setFieldValue }) => {
@@ -146,15 +147,26 @@ const Answers = ({ question, name, setFieldValue, name1, nameNb, name2 }) => (
                 // onLoad={()=> allFormValues === null ? console.log('dupa') : previewPhoto(allFormValues.values.name.index.photo, `${name}${index}img${index}`)}
                  
                 className="form-control" />
-                  {/* { name.index.photo !== null &&  */}
+                {/* zdjecie odp */}
+                  
                   <img
                   className="formImg"
+                  data-dd={name2}
                   data-path={`${name}.${index}.photo`}
                    id={`${name}${index}img${index}`} 
                    style={{ marginTop: "30px", marginBottom:"15px", display:"block", maxHeight:"200px"}} 
-                   src={(allFormValues.values[name1][nameNb] !== undefined && allFormValues.values[name1][nameNb][name2].index !== undefined) ?  allFormValues.values[name1][nameNb][name2][index].photo.src : ''} 
-                   height="" alt=""/>
-                  {/* } */}
+                  //  src={(allFormValues.values[name1][nameNb] !== undefined && allFormValues.values[name1][nameNb][name2].index !== undefined) ?  allFormValues.values[name1][nameNb][name2][index].photo.src : ''} 
+                  src={(
+                    allFormValues !== null &&  
+                    allFormValues.values['questions'] && 
+                    allFormValues.values['questions'][nameNb] && 
+                    allFormValues.values['questions'][nameNb][name2][index] &&
+                    allFormValues.values['questions'][nameNb][name2][index].photo &&
+                    allFormValues.values['questions'][nameNb][name2][index].photo.src
+                    ) 
+                    ?  allFormValues.values['questions'][nameNb][name2][index].photo.src : '' }   
+                  alt=""/>
+                  
               </div>
               <div className="col">
                 <button
@@ -190,6 +202,7 @@ function previewPhoto(inputId, imgId) {
   const photo = document.getElementById(inputId).files[0];
   console.log(photo, 'files z prewiew')
   const preview = document.getElementById(imgId);
+  console.log(preview, 'prewiew')
   const reader = new FileReader();
   reader.addEventListener("load", () => {
     preview.src = reader.result;
@@ -282,7 +295,7 @@ const QuizForm = () => {
 {/* główne zdjecie */}
           <div className="form-group">
             <label htmlFor="photo">Zdjęcie główne</label>
-            <input id="photo" name="photo" type="file" 
+            <input id="photo" name="photo" type="file"
             onChange={(event) => {
               setTimeout(()=>(previewPhoto('photo', 'photoimg')), 1000);
               const img = document.getElementById('photoimg');
@@ -299,14 +312,13 @@ const QuizForm = () => {
             }} 
             className="form-control" 
             />
-         { values.photo !== null && <img 
+         {/* { (values.photo !== null || allFormValues && allFormValues.values['photo'] && allFormValues.values['photo'].src ) && <img  */}
+           <img 
           className="formImg"
          id="photoimg" 
-          //  onLoad={allFormValues === null ? console.log('dupa') : previewPhoto(allFormValues.values['photo'], 'photoimg')} 
-           src={allFormValues === null ? '' : allFormValues.values['photo'].src } 
-         height="200" 
+         src={(allFormValues !== null &&  allFormValues.values['photo'] && allFormValues.values['photo'].src ) ?  allFormValues.values['photo'].src : '' }   
          style={{ marginTop: "30px", marginBottom:"30px", display:"block"}} 
-         alt=""/>}
+         alt=""/>
           </div>
 
           {/* calendar */}
@@ -402,7 +414,7 @@ const QuizForm = () => {
                         data-path={`questions.${index}.photo`}
                        id={`questions${index}img${index}`} 
                       //  src={(allFormValues.values['questions'] !== undefined && allFormValues.values['questions'][index] !== undefined && allFormValues.values['questions'][index].photo.src === null ) ? allFormValues.values['questions'][index].photo.src : ''} 
-                       height=""
+                       src={(allFormValues !== null &&  allFormValues.values['questions'] && allFormValues.values['questions'][index] && allFormValues.values['questions'][index].photo && allFormValues.values['questions'][index].photo.src ) ?  allFormValues.values['questions'][index].photo.src : '' }   
                        style={{ maxHeight:"200px", marginTop: "30px", marginBottom:"15px", display:"block"}} 
                        alt=""/>
                        {/* } */}
